@@ -12,22 +12,29 @@ namespace ferreteria.Controllers
     public class ProductsController : ApiController
     {
         [HttpGet]
-        [Route("prueba")]
-        public HttpResponseMessage prueba()
+        [Route("getProducts")]
+        public HttpResponseMessage getProducts()
         {
-            HttpResponseMessage message = new HttpResponseMessage();
+            HttpResponseMessage ressponse = new HttpResponseMessage();
 
-            message.StatusCode = HttpStatusCode.BadRequest;
+            Response<List<Models.Products>> lista = Models.Products.getProducts();
 
-            message.Content = new ObjectContent<Response<bool>>(new Response<bool>()
+            ressponse.Content = new ObjectContent<Response<List<Models.Products>>>(lista, Utiles.Formatter);
+
+            if (lista.Estatus == Estatus.Exito)
             {
-                Estatus = Estatus.Exito,
-                Mensaje = "Todo correcto",
-                MensajeTecnico = "Prueba de mensaje"
-            }, Utiles.Formatter);
+                ressponse.StatusCode = HttpStatusCode.OK;
+            }
+            else if (lista.Estatus == Estatus.Advertencia)
+            {
+                ressponse.StatusCode = HttpStatusCode.NoContent;
+            }
+            else
+            {
+                ressponse.StatusCode = HttpStatusCode.InternalServerError;
+            }
 
-            return message;
-
+            return ressponse;
         }
     }
 }

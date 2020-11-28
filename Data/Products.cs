@@ -1,14 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Data.SqlClient;
 using System.Data;
-using System.Data.SqlClient;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Configuration;
+using System;
 
 namespace Data
 {
-    class Products
+    public class Products
     {
         public ConexionBD conexion;
         public Products(ConexionBD con)
@@ -18,16 +15,7 @@ namespace Data
 
         public DataTable getProducts()
         {
-            return this.conexion.GenericSPSelect("getProducts");
+            return this.conexion.GenericSPSelect("GetProducts");
         }
-
-        public DataTable getProductById(int product_id)
-        {
-            return conexion.GenericSPSelect("getProductID", new SqlParameter[]
-            {
-                new SqlParameter("@id", SqlDbType.Int) { Value = product_id }
-            });
-        }
-
     }
 }
