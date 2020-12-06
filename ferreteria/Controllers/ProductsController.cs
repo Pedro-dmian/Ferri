@@ -36,5 +36,29 @@ namespace ferreteria.Controllers
 
             return ressponse;
         }
+
+        [HttpPost]
+        [Route("saveProducts")]
+        public HttpResponseMessage saveProducts(Models.Products product)
+        {
+            HttpResponseMessage ressponse = new HttpResponseMessage();
+
+            Response<bool> respuesta = Models.Products.save(product);
+
+            if (respuesta.Estatus == Estatus.Exito)
+            {
+                ressponse.StatusCode = HttpStatusCode.OK;
+            }
+            else if (respuesta.Estatus == Estatus.Advertencia)
+            {
+                ressponse.StatusCode = HttpStatusCode.NoContent;
+            }
+            else
+            {
+                ressponse.StatusCode = HttpStatusCode.InternalServerError;
+            }
+
+            return ressponse;
+        }
     }
 }

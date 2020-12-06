@@ -55,9 +55,35 @@ namespace ferreteria.Models
                 res.Mensaje = "No se pueden obtener los productos en este momento.";
                 res.MensajeTecnico = ex.Message;
             }
+            return res;
+        }
 
+        public static Response<bool> save(Products product)
+        {
+            Response<bool> res = new Response<bool>()
+            {
+                Estatus = Estatus.Error
+            };
 
+            try
+            {
+                bool saveProduct = new Data.Products(new Data.ConexionBD()).save(product.name, product.description, product.sales_price, product.purchase_price, product.status);
 
+                if (saveProduct)
+                {
+                    res.Datos = true;
+                    res.Estatus = Estatus.Exito;
+                } else
+                {
+                    res.Datos = false;
+                    res.Estatus = Estatus.Advertencia;
+                }
+            }
+            catch (Exception ex)
+            {
+                res.Mensaje = "No se pueden obtener los productos en este momento.";
+                res.MensajeTecnico = ex.Message;
+            }
             return res;
         }
     }
